@@ -33,4 +33,5 @@ class Cutter:
 
     def service(self):
         self.seperate()
+        self.seperate()
         return self.cut()
