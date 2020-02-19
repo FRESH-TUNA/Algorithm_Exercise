@@ -1,10 +1,10 @@
 class Solution {
-  public String max_calculator(number) {
+  public String max_calculator(String number) {
     int max_number = -1;
-    for(i = 0; i < number.length; i++) {
-      candidate = String.substring(0,i) + String.substring(i + 1, number.length);
+    for(int i = 0; i < number.length(); i++) {
+      String candidate = number.substring(0,i) + number.substring(i + 1, number.length());
       if(Integer.parseInt(candidate) > max_number) {
-        max_number = Integer.parseInt(candidate)
+        max_number = Integer.parseInt(candidate);
       }
     }
     return Integer.toString(max_number);
