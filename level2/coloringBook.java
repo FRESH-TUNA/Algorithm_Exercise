@@ -7,19 +7,27 @@ class ColoringBook {
   private int countOfArea;
   
   public ColoringBook(int[] world) {
-      this.world = world
+    this.world = world;
+    this.maxWideOfArea = 0;
+    this.countOfArea = 0;
   }
 
   public void service() {
-    for 배열 
-    if 라스트하고 다르면 
-        if 갯수가 최대 갯수보다 크면
-        최대갯수 갱신
-        갯수 1로 초기화
-        공간갯수 1증가
-    else
-    갯수 1증가
-    end
+    if(this.world.length == 0)
+        return;
+    
+    int lastBlock = this.world[0] + 1;
+    int wideOfArea = 0;
+    for (int i : this.world) { 
+      if(i != lastBlock) {
+        if(wideOfArea > this.maxWideOfArea) 
+          this.maxWideOfArea = wideOfArea;
+        ++this.countOfArea; 
+        wideOfArea = 1;
+      }
+      else
+        ++wideOfArea;
+    } 
   }
 
   public static void main(String[] args) {
