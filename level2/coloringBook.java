@@ -1,24 +1,25 @@
-import java.util.Stack;
-import java.util.Iterator;
+import java.util.Arrays;
 
 class ColoringBook {
   private int[] world;
   private int maxWideOfArea;
-  private int countOfArea;
   
   public ColoringBook(int[] world) {
     if(world.length == 0)
       this.world = new int[1];
-    else
-      this.world = Arrays.copyOf(world, world.length + 1);
-      this.world[this.world.length - 1] = this.world[1];
+    else {
+      this.world = new int[world.length + 1];
+      for(int i = 1; i < this.world.length; ++i) {
+        this.world[i] = world[i-1];
+      }
+    }
   }
 
   public void service() {
     int countOfArea = 0;
-    int lastBlock = this.world[0];
-    int wideOfArea = 0;
+    int wideOfArea = -1;
     int maxWideOfArea = 0;
+    int lastBlock = this.world[0];
 
     if(this.world.length <= 1) {
       System.out.println(countOfArea);
@@ -29,12 +30,16 @@ class ColoringBook {
       if(i != lastBlock) {
         if(wideOfArea > this.maxWideOfArea) 
           maxWideOfArea = wideOfArea;
-        ++this.countOfArea; 
+        ++countOfArea; 
         wideOfArea = 1;
       }
       else
         ++wideOfArea;
     } 
+
+    if(wideOfArea != 1)
+      ++countOfArea; 
+
     System.out.println(countOfArea);
     System.out.println(maxWideOfArea);
   }
