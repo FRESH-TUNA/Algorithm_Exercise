@@ -28,6 +28,33 @@ def n을만들수있는방법중가장큰것(숫자)
 
   return "Goldbach's conjecture is wrong."
 
+
+def n을만들수있는방법중가장큰것(숫자)
+  숫자A = 2
+  숫자B = 숫자 - 2
+  
+  while (숫자A < 숫자B):
+    if 소수(숫자A) and 소수(숫자B):
+      return 출력(숫자A, 숫자B)
+    else:
+      숫자A += 1
+      숫자B -= 1
+
+  return "Goldbach's conjecture is wrong."
+
+def n을만들수있는방법중가장큰것(숫자)
+  숫자A = 2
+  숫자B = 숫자 - 2
+  
+  while (숫자A < 숫자B):
+    if 소수(숫자A) and 소수(숫자B):
+      return 출력(숫자A, 숫자B)
+    else:
+      숫자A += 1
+      숫자B -= 1
+
+  return "Goldbach's conjecture is wrong."
+
 def 가능한소수들만골라내기(숫자)
   숫자배열 = [false] * (숫자 + 1)
   
@@ -42,3 +69,13 @@ def 배열안숫자의곱하기되는친구들비활성화(인덱스, 숫자배�
     인덱스 비활성화
     인덱스 += 인덱스
 
+ def n을만들수있는방법중가장큰것(숫자)
+    소수배열[숫자 / 2 + 1]
+    베이스소수 = 2
+
+    while(베이스소수 <=  소수배열의크기 - 1):
+      if 소수인가(숫자 - 베이스소수):
+        return 가장 큰 방법
+      else:
+        에라토스테네스의체시행() 
+        그다음으로작은베이스소수수정()

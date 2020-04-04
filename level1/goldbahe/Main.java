@@ -17,14 +17,36 @@ class GoldbaheService {
     }
     return true;
   }
+ 
+  private void aeratostenes(boolean[] numbers, int baseSosu) {
+    while(baseSosu < numbers.length) {
+      numbers[baseSosu] = true;
+      baseSosu += baseSosu;
+    }
+  }
+
+  private int findNextSmallestSosu(boolean[] numbers, int baseSosu) {
+    baseSosu += 1;
+    while(baseSosu <= numbers.length - 1) {
+      if(numbers[baseSosu] == false)
+        break;
+      else
+        baseSosu += 1;
+    }
+    return baseSosu;
+  }
 
   private int[] calculateBiggestDifferencePair() {
-    int[] pair = new int[] {2, this.number - 2};
-    while (pair[0] <= pair[1]) {
-      if (this.isSosu(pair[0]) && this.isSosu(pair[1]))
-        return pair;
-      else
-        pair[0] += 1; pair[1] -= 1;
+    boolean[] numbers = new boolean[this.number / 2 + 1];
+    int baseSosu = 2;
+
+    while (baseSosu <= numbers.length - 1) {
+      if (this.isSosu(this.number - baseSosu))
+        return new int[]{baseSosu, this.number - baseSosu};
+      else {
+        this.aeratostenes(numbers, baseSosu);
+        baseSosu = this.findNextSmallestSosu(numbers, baseSosu);
+      }
     }
     return new int[]{0, 0};
   }
