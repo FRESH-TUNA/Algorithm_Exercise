@@ -1,34 +1,28 @@
 import java.util.Scanner;
 
 class GoldbaheService {
-  private int number;
+  private Scanner scanner;
+  private boolean[] sosuOrNonsosu;
 
-  public GoldbaheService(int number) {
-    this.number = number;
+  public GoldbaheService(int maxNumber) {
+    this.scanner = new Scanner(System.in);
+    this.sosuOrNonsosu = new boolean[maxNumber / 2 + 1];
+    this.aeratostenes();
   }
 
-  private boolean isSosu(int number) {
-    if (number == 1)
-      return false;
-    else {
-      for (int numberInRange = 2; numberInRange < number; ++numberInRange)
-        if (number % numberInRange == 0)
-          return false;
-    }
-    return true;
-  }
- 
-  private void aeratostenes(boolean[] numbers, int baseSosu) {
-    while(baseSosu < numbers.length) {
-      numbers[baseSosu] = true;
-      baseSosu += baseSosu;
+  private void aeratostenes() {
+    int baseSosu = 2;
+    while(baseSosu <= this.sosuOrNonsosu.length - 1) {
+      for(int nonSosu = baseSosu * 2; nonSosu < this.sosuOrNonsosu.length; nonSosu += baseSosu)
+        this.sosuOrNonsosu[nonSosu] = true;
+      baseSosu = this.findNextSmallestSosu(baseSosu);
     }
   }
 
-  private int findNextSmallestSosu(boolean[] numbers, int baseSosu) {
+  private int findNextSmallestSosu(int baseSosu) {
     baseSosu += 1;
-    while(baseSosu <= numbers.length - 1) {
-      if(numbers[baseSosu] == false)
+    while(baseSosu <= this.sosuOrNonsosu.length - 1) {
+      if(this.isSosu(baseSosu))
         break;
       else
         baseSosu += 1;
@@ -36,28 +30,29 @@ class GoldbaheService {
     return baseSosu;
   }
 
-  private int[] calculateBiggestDifferencePair() {
-    boolean[] numbers = new boolean[this.number / 2 + 1];
-    int baseSosu = 2;
+  private boolean isSosu(int number) {
+    return !this.sosuOrNonsosu[number];
+  }
 
-    while (baseSosu <= numbers.length - 1) {
-      if (this.isSosu(this.number - baseSosu))
-        return new int[]{baseSosu, this.number - baseSosu};
-      else {
-        this.aeratostenes(numbers, baseSosu);
-        baseSosu = this.findNextSmallestSosu(numbers, baseSosu);
-      }
+  private int[] calculateBiggestDifferencePair(int number) {
+    int candidate = 2;
+
+    while (candidate <= number/ 2) {
+      if (this.isSosu(number - candidate)) 
+        return new int[]{candidate, number - candidate};
+      else 
+        candidate = this.findNextSmallestSosu(candidate);
     }
     return new int[]{0, 0};
   }
 
-  private boolean isGoldbahe() {
-    return this.number > 4 && this.number % 2 == 0 ? true : false;
+  private boolean isGoldbahe(int number) {
+    return number > 4 && number % 2 == 0 ? true : false;
   }
 
   private String makeResult(int[] pair) {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(this.number);
+    stringBuilder.append(pair[0] + pair[1]);
     stringBuilder.append(" = ");
     stringBuilder.append(pair[0]);
     stringBuilder.append(" + ");
@@ -65,26 +60,13 @@ class GoldbaheService {
     return stringBuilder.toString();
   }
 
-  public String call() {
-    if(this.isGoldbahe()) 
-      return this.makeResult(this.calculateBiggestDifferencePair());
-    else 
-      return "Goldbach's conjecture is wrong.";
-  }
-}
-
-class GoldbaheIterationService {
-  private Scanner scanner;
-
-  public GoldbaheIterationService() {
-    this.scanner = new Scanner(System.in);
-  }
-
   public void call() {
     int testNumber = 0;
     while ((testNumber = this.scanner.nextInt()) != 0) {
-      GoldbaheService goldbaheService = new GoldbaheService(testNumber);
-      System.out.println(goldbaheService.call());
+      if(this.isGoldbahe(testNumber)) 
+        System.out.println(this.makeResult(this.calculateBiggestDifferencePair(testNumber)));
+      else 
+        System.out.println("Goldbach's conjecture is wrong.");
     }
     this.scanner.close();
   }
@@ -92,7 +74,7 @@ class GoldbaheIterationService {
 
 public class Main {
   public static void main(String[] args) {
-    GoldbaheIterationService goldbaheIterationService = new GoldbaheIterationService();
+    GoldbaheService goldbaheIterationService = new GoldbaheService(2000000);
     goldbaheIterationService.call();
   }
 }
