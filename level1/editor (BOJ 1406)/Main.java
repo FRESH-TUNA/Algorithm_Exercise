@@ -87,9 +87,9 @@ class EditorService {
   }
 
   public void moveCursor(boolean isRight) {
-    if(isRight)
+    if(isRight && this.pointer < this.lineLength)
       this.pointer += 1;
-    else if(this.pointer > 0)
+    else if(!isRight && this.pointer > 0)
       this.pointer -= 1;
   }
 
@@ -98,8 +98,9 @@ class EditorService {
       System.arraycopy(
         this.line, this.pointer, 
         this.line , this.pointer - 1, 
-        this.lineLength - this.pointer
+        this.lineLength - this.pointer + 1
       );
+      --this.lineLength;
       --this.pointer;
     }
   }
@@ -108,9 +109,10 @@ class EditorService {
     System.arraycopy(
       this.line, this.pointer, 
       this.line , this.pointer + 1, 
-      this.lineLength - this.pointer
+      this.lineLength - this.pointer + 1
     );
     this.line[this.pointer++] = wishToAdd;
+    ++this.lineLength;
   }
 
   public void call() {
