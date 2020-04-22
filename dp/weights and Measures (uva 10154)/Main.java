@@ -13,7 +13,6 @@ class SortByStrength implements Comparator<Turtle> {
 class Turtle {
   int weight;
   int strength;
-
 }
 
 public class Main {
@@ -26,6 +25,7 @@ public class Main {
     String line = null;
     while((line = br.readLine()) != null) {
       String[] splitedLine = line.split(" ");
+      turtles[amountOfTurtles] = new Turtle();   
       turtles[amountOfTurtles].weight = Integer.parseInt(splitedLine[0]);
       turtles[amountOfTurtles++].strength = Integer.parseInt(splitedLine[1]);
     }
