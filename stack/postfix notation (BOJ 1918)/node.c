@@ -8,8 +8,7 @@ struct __Node {
   Node *right;
 };
 
-
-Node* Node__create(void *object) {
+Node* Node__create(Type object) {
   Node *newNode = malloc(sizeof(Node));
   newNode -> object = object;
   newNode -> left = NULL;
