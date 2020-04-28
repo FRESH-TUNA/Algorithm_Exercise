@@ -1,12 +1,14 @@
 #ifndef __NODE_H
 #define __NODE_H
 
-typedef struct __Node Node;
-typedef char Type;
+#include "type.h"
 
-Node* Node__create(void *object);
-Node* Node__set_left(Node *newNode);
-Node* Node__set_right(Node *newNode);
+typedef struct __Node Node;
+
+Node* Node__create(Type object);
+Type Node__get_value(Node *node);
+Node* Node__get_next(Node *node);
+void Node__set_next(Node *node, Node *next_node);
 void Node__freeNode(Node *node);
 
 #endif /* __NODE_H */

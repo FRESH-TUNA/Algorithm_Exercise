@@ -1,35 +1,32 @@
-#include "./node.h"
+#include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 struct __Node {
   Type object;
-  Node *left;
-  Node *right;
+  Node *next;
 };
 
 Node* Node__create(Type object) {
   Node *newNode = malloc(sizeof(Node));
   newNode -> object = object;
-  newNode -> left = NULL;
-  newNode -> right = NULL;
+  newNode -> next = NULL;
   return newNode;  
 }
 
-Node* Node__set_left(Node *newNode) {
-  newNode -> left = newNode; 
-  return newNode;
+Node* Node__get_next(Node *node) {
+  return node -> next;
 }
 
-Node* Node__set_right(Node *newNode) {
-  newNode -> right = newNode; 
-  return newNode;
+void Node__set_next(Node *node, Node *next_node) {
+  node -> next = next_node;
 }
 
 void Node__freeNode(Node *node) {
-  if (node -> left != NULL)
-    Node__freeNode(node -> left);
-  if (node -> right != NULL)
-    Node__freeNode(node -> right);
-  free(node);
+  if (node != NULL && node -> next == NULL)
+    free(node);
+}
+
+Type Node__get_value(Node *node) {
+  return node -> object;
 }
