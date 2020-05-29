@@ -19,6 +19,12 @@ class Gcd {
     else
       return this.gcd(b, remain);
   }
+
+  public int gcd() {
+    int gcd = 1;
+    while (this.a % gcd == 0 && this.b % gcd == 0) ++gcd;
+    return gcd;
+  }
 }
 
 class Lcm {
