@@ -11,30 +11,36 @@ public class Main {
   private static int start; 
   private static int end;
 
-  static void init() {
-    edges = new ArrayList<List<Node> >(); 
-  }
-
   static void input() throws IOException { 
     BufferedReader br 
       = new BufferedReader(new InputStreamReader(System.in));
     num_of_vertices = Integer.parseInt(br.readLine());
     num_of_edges = Integer.parseInt(br.readLine());
 
+    edges = new ArrayList<List<Node>>(num_of_vertices + 1); 
     for (int i = 0; i <= num_of_vertices; i++) { 
-      List<Node> item = new ArrayList<Node>(); 
+      List<Node> item = new ArrayList<Node>(num_of_vertices + 1); 
       edges.add(item); 
     } 
 
     for (int i = 0; i < num_of_edges; ++i) {
       StringTokenizer st = new StringTokenizer(br.readLine());
-      edges.get(
-        Integer.parseInt(st.nextToken())).add(
-          new Node(
-            Integer.parseInt(st.nextToken()), 
-            Integer.parseInt(st.nextToken())
-          )
-      ); 
+      int source = Integer.parseInt(st.nextToken());
+      int dest = Integer.parseInt(st.nextToken());
+      int weight = Integer.parseInt(st.nextToken());
+
+      Node temp = edges.get(source).get(dest);
+
+      if(temp == null) {
+        edges.get(source).add(
+          new Node(dest, weight)
+        ); 
+      }
+      else if(temp.cost < weight) {
+        edges.get(source).set(
+          source, new Node(dest, weight)
+        ); 
+      }
     }
     StringTokenizer st = new StringTokenizer(br.readLine());
     start = Integer.parseInt(st.nextToken());
@@ -67,7 +73,7 @@ public class Main {
     for (int i = 0; i < edges.get(u).size(); i++) {
       Node v = edges.get(u).get(i);
 
-      if (!traced.contains(v.vertex)) {
+      if (v != null && !traced.contains(v.vertex)) {
         int newDistance = distance[u] + v.cost;
 
         if (newDistance < distance[v.vertex])
@@ -79,7 +85,6 @@ public class Main {
   }
   // Driver code
   public static void main(String arg[]) throws IOException {
-    init();
     input();
     init_after_input();
     dijkstra();
