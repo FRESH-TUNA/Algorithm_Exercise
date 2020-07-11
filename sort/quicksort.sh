@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# global variable
+numbers=()
+
 input() {
   numbers=($@)
+}
+
+print() {
+  echo ${numbers[@]}
 }
 
 swap() {
@@ -27,20 +34,24 @@ partition() {
       swap $pivot_insert_pos $i
     fi
   done
+
+  pivot_insert_pos+=1
+  swap $pivot_insert_pos $i
+  echo $pivot_insert_pos
 }
 
 quicksort() {
   start=$1
-  length=$2
-  pivot_index=${($start + $length) / 2}
+  end=$2
 
-  partition $start $length $pivot_index
-  quicksort()
-  quicksort()
-    echo "foo1"
-    foo2     
-    quicksort  
+  if [ $start -eq ${$end-1} ]
+  then
+    pivot_index=$(partition $start $length ${($start + $length) / 2})
+    quicksort $start ${pivot_index+1}
+    quicksort ${pivot_index+1} $length
+  fi
 }
 
-input();
+input $@
 quicksort 0 ${#numbers[@]};
+echo ${numbers[@]}
