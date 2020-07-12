@@ -2,6 +2,7 @@
 
 # global variable
 numbers=()
+partition_pos=-1
 
 input() {
   numbers=($@)
@@ -21,37 +22,36 @@ swap() {
 }
 
 partition() {
-  start=$1
-  length=$2
-  pivot_insert_pos=${start - 1}
-  pivot_value=${numbers[$3]}
+  start=$1;
+  end=$2;
+  partition_pos=$((start - 1))
+  pivot_value=${numbers[$end]};
 
-  for ((i=start; i<length; ++i))
+  for ((i=start; i<=end - 1; ++i))
   do
-    if [ $pivot_value -ge ${numbers[i]} ]
+    if [ $pivot_value -gt ${numbers[i]} ];
     then
-      pivot_insert_pos+=1
-      swap $pivot_insert_pos $i
+      ((partition_pos+=1))
+      swap $partition_pos $i
     fi
   done
 
-  pivot_insert_pos+=1
-  swap $pivot_insert_pos $i
-  echo $pivot_insert_pos
+  ((partition_pos+=1))
+  swap $partition_pos $end
 }
 
 quicksort() {
   start=$1
   end=$2
 
-  if [ $start -eq ${$end-1} ]
+  if [ $start -lt $end ]
   then
-    pivot_index=$(partition $start $length ${($start + $length) / 2})
-    quicksort $start ${pivot_index+1}
-    quicksort ${pivot_index+1} $length
+    partition $start $end 
+    quicksort $start $((partition_pos-1))
+    quicksort $((partition_pos+1)) $end
   fi
 }
 
 input $@
-quicksort 0 ${#numbers[@]};
-echo ${numbers[@]}
+quicksort 0 $((${#numbers[@]} - 1));
+print
