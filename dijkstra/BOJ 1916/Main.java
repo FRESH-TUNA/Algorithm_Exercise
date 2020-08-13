@@ -5,8 +5,7 @@ public class Main {
   private static int num_of_vertices; // Number of vertices
   private static int num_of_edges;
   private static int distance[];
-  private static List<List<Node>> edges;
-  private static Set<Integer> traced;
+  private static ArrayList<List<Node>> edges;
   private static PriorityQueue<Node> pq;
   private static int start; 
   private static int end;
@@ -17,31 +16,18 @@ public class Main {
     num_of_vertices = Integer.parseInt(br.readLine());
     num_of_edges = Integer.parseInt(br.readLine());
 
-    edges = new ArrayList<List<Node>>(num_of_vertices + 1); 
-    for (int i = 0; i <= num_of_vertices; i++) { 
-      List<Node> item = new ArrayList<Node>(num_of_vertices + 1); 
-      edges.add(item); 
-    } 
+    edges = new ArrayList<List<Node>>(num_of_vertices + 1);
+    for (int i = 0; i <= num_of_vertices; i++)  
+      edges.add(new LinkedList<Node>());
 
     for (int i = 0; i < num_of_edges; ++i) {
       StringTokenizer st = new StringTokenizer(br.readLine());
       int source = Integer.parseInt(st.nextToken());
       int dest = Integer.parseInt(st.nextToken());
       int weight = Integer.parseInt(st.nextToken());
-
-      Node temp = edges.get(source).get(dest);
-
-      if(temp == null) {
-        edges.get(source).add(
-          new Node(dest, weight)
-        ); 
-      }
-      else if(temp.cost < weight) {
-        edges.get(source).set(
-          source, new Node(dest, weight)
-        ); 
-      }
+      edges.get(source).add(new Node(dest, weight));
     }
+    
     StringTokenizer st = new StringTokenizer(br.readLine());
     start = Integer.parseInt(st.nextToken());
     end = Integer.parseInt(st.nextToken());
@@ -50,39 +36,34 @@ public class Main {
 
   static void init_after_input() {
     distance = new int[num_of_vertices + 1]; 
-    traced = new HashSet<Integer>(); 
     pq = new PriorityQueue<Node>(num_of_vertices, new Node()); 
     for (int i = 1; i <= num_of_vertices; i++)
-      distance[i] = Integer.MAX_VALUE;
+      distance[i] = 100000000;
   }
 
-  // Function for Dijkstra's Algorithm
   static void dijkstra() {
     distance[start] = 0;
     pq.add(new Node(start, 0));
 
-    while (traced.size() != num_of_vertices) {
-      int u = pq.remove().vertex;
-      traced.add(u);
-      trace_neighbors(u);
+    while(!pq.isEmpty()) {
+      Node node = pq.remove();
+      int vertex = node.vertex;
+      int cost = node.cost;
+
+      if (distance[vertex] < cost)
+        continue;
+      Iterator<Node> it = edges.get(vertex).iterator();
+
+      while(it.hasNext()) {
+        Node linked_node = it.next();
+        if(distance[linked_node.vertex] > linked_node.cost + cost) {
+          distance[linked_node.vertex] = linked_node.cost + cost;
+          pq.add(new Node(linked_node.vertex, linked_node.cost + cost));
+        }
+      }
     }
     System.out.println(distance[end]);
   } 
-
-  private static void trace_neighbors(int u) {
-    for (int i = 0; i < edges.get(u).size(); i++) {
-      Node v = edges.get(u).get(i);
-
-      if (v != null && !traced.contains(v.vertex)) {
-        int newDistance = distance[u] + v.cost;
-
-        if (newDistance < distance[v.vertex])
-          distance[v.vertex] = newDistance;
-
-        pq.add(new Node(v.vertex, distance[v.vertex]));
-      }
-    }
-  }
   // Driver code
   public static void main(String arg[]) throws IOException {
     input();
