@@ -1,44 +1,59 @@
 #!/bin/bash
 
-numbers=()
-head=0
-tail=0
-yosepuse_value=$1
+numbers=();
+result=();
+yosepuse_value=0;
 
 init() {
-  for ((i=1; i <= $1; i++))
+  for ((i=1; i<=$1; ++i))
   do
     numbers+=($i)
   done
+  yosepuse_value=$2
+}
+
+head() {
+  echo ${numbers[0]};
 }
 
 pop() {
-  value=
+  value=${numbers[0]}
+  numbers=("${numbers[@]:1}")
 }
 
 enqueue() {
-
+  numbers+=($1)
 }
 
-nthPopAndEnqueue() {
+nthMinusOnePopAndEnqueue() {
+  for ((i=1; i < $yosepuse_value; i++))
+  do
+    head_value=$(head);
+    pop;
+    enqueue $head_value;
+  done
+}
 
+append_to_result() {
+  head_value=$(head);
+  pop;
+  result+=($head_value);
+}
+
+print_result() {
+  echo ${result[@]};
 }
 
 call() {
-  init $
+  while [ ${#numbers[@]} -gt 1 ]
+  do
+    nthMinusOnePopAndEnqueue;
+    append_to_result;
+  done
+
+  append_to_result;
+  print_result;
 }
 
-for ((i=0; i < ${#numbers[@]}; i++))
-do
-  for ((j=0; j < ${#numbers[@]}-i-1; j++))
-  do
-    if [ ${numbers[j]} -gt ${numbers[$((j+1))]} ]
-    then
-      temp=${numbers[j]}
-      numbers[$j]=${numbers[$((j+1))]}
-      numbers[$((j+1))]=$temp
-    fi
-  done
-done 
-
-echo ${numbers[@]}
+init $@;
+call;
