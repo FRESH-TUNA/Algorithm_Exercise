@@ -8,14 +8,14 @@ def calculate_right_count(index, name):
     for i in range(1,len(name)):
         if name[index+i]=="A": count += 1
         else: break
-    return count
+    return count + 1
 
 def calculate_left_count(index, name):
     count = 0
     for i in range(1,len(name)):
         if name[index-i]=="A": count += 1
         else: break
-    return count
+    return count + 1
 
 def solution(name):
     answer = 0
@@ -35,10 +35,11 @@ def solution(name):
         left_count = calculate_left_count(index, name) 
         right_count = calculate_right_count(index, name)
 
-        if right_count > left_count:
+        if right_count < left_count:
             answer += right_count
             index += right_count
         else:
             answer += left_count
+            index -= left_count
             
     return answer
